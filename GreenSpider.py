@@ -1,21 +1,37 @@
 # coding=utf-8
 import urllib2
-
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
 import requests
 from bs4 import BeautifulSoup
 import ssl
 
 
 # ssl._create_default_https_context = ssl._create_unverified_context
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 
 class GreenSpider():
     '''
     基于BeautifulSoup的爬虫
     '''
     # 私有实例变量（外部访问会报错）
-    __url = 'http://www.ppdai.com/'
+    __url_ppdai_homepage = 'http://www.ppdai.com/'
+    __url_ppdai_map = 'http://map.invest.ppdai.com/'
     # 实例变量
     public_url = ''
+
+    def base_spider_webdriver(self):
+        '''
+        使用webdriver获取动态数据
+        :return:
+        '''
+        cap = webdriver.DesiredCapabilities.PHANTOMJS
+        cap["phantomjs.page.settings.resourceTimeout"] = 1000
+        driver = webdriver.PhantomJS(desired_capabilities=cap)
+        driver.get(self.__url_ppdai_homepage)
+        code = driver.page_source
+        return code
+
 
     def set_url(self, url):
         self.__url = url
@@ -39,7 +55,7 @@ class GreenSpider():
         headers = {
             'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US; rv:1.9.1.6) Gecko/20091201 Firefox/3.5.6'}
 
-        req = urllib2.Request(self.__url,
+        req = urllib2.Request(self.__url_ppdai_homepage,
                               headers=headers)
         html = urllib2.urlopen(req).read()
         # response = urllib2.urlopen(self.__url)
@@ -90,12 +106,12 @@ class GreenSpider():
         # print tag # <body><noscript><meta content="0;url=http://www.baidu.com/" http-equiv="refresh"/></noscript></body>
         # print tag.name # body
         # print tag['div']
-        # print tag.attrs # {}
-        # return tag
-
+        # print tag.at    trs  # {}
+    # return tag
 
 if __name__ == '__main__':
     green_spider = GreenSpider()
-    # print green_spider.base_spider_urllib2()
+    print green_spider.base_spider_urllib2()
     # tag = green_spider.leg_tag(green_spider.base_spider_urllib2())
-    green_spider.soup_struct_data()
+    # green_spider.soup_struct_data()
+    # green_spider.base_spider_webdriver()
