@@ -14,13 +14,11 @@ class GreenSpider():
     '''
     基于BeautifulSoup的爬虫
     '''
-    # 私有实例变量（外部访问会报错）
-    __url_ppdai_homepage = 'http://www.ppdai.com/'
-    __url_ppdai_map = 'http://map.invest.ppdai.com/'
+
     # 实例变量
     public_url = ''
 
-    def base_spider_webdriver(self):
+    def base_spider_webdriver(self, url):
         '''
         使用webdriver获取动态数据
         :return:
@@ -28,7 +26,7 @@ class GreenSpider():
         cap = webdriver.DesiredCapabilities.PHANTOMJS
         cap["phantomjs.page.settings.resourceTimeout"] = 1000
         driver = webdriver.PhantomJS(desired_capabilities=cap)
-        driver.get(self.__url_ppdai_homepage)
+        driver.get(url)
         code = driver.page_source
         return code
 
