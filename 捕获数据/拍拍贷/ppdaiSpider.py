@@ -12,6 +12,18 @@ class PpdSpider(GreenSpider):
     # 私有实例变量（外部访问会报错）
     __url_ppdai_homepage = 'http://www.ppdai.com/'
     __url_ppdai_map = 'http://map.invest.ppdai.com/'
+    __url_ppdai_data = 'http://ppdai.p2peye.com/shuju/'
+
+    def shuju_page(self):
+        '''
+        数据页
+        :return:
+        '''
+
+        data = self.base_spider_webdriver(self.__url_ppdai_data)
+        # from data import data
+        soup = BeautifulSoup(data)
+        print soup
 
     def hp_deal_number(self):
         '''
@@ -64,8 +76,6 @@ class PpdSpider(GreenSpider):
                 print deals['regist_number']
                 print deals['loan_number']
                 print deals['g_m_v']
-
-
                 #todo:将存入数据库或excel
 
     def p2p_manage_money(self):
@@ -77,4 +87,5 @@ class PpdSpider(GreenSpider):
 if __name__ == '__main__':
     ppd_spider = PpdSpider()
     #ppd_spider.hp_deal_number()
-    ppd_spider.hp_deal_monitor()
+    #ppd_spider.hp_deal_monitor()
+    ppd_spider.shuju_page()
