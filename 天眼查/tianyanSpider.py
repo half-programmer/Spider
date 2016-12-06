@@ -13,26 +13,24 @@ class TianyanSpider(GreenSpider):
     '''
     基于GreenSpider的爬虫,关于天眼网站的一系列方法
     '''
-    __page = 1
+    __page = 11
     # 私有实例变量（外部访问会报错）
     # 数码科技有限公司
-    __url_tianyan_shuma = 'http://nanjing.tianyancha.com/search/p'+str(__page)+'?key=%E6%95%B0%E7%A0%81'
-    __url_tianyan_sheying = 'http://nanjing.tianyancha.com/search/p'+str(__page)+'?key=%E6%91%84%E5%BD%B1'
-
-
     def company_list(self):
         '''
         获取首页注册用户人数，成功借款数，成交总额
         :return:dict(注册用户人数，成功借款数，成交总额)
         '''
+        __url_tianyan_sheying = 'http://nanjing.tianyancha.com/search/p' + str(self.__page) + '?key=%E6%91%84%E5%BD%B1'
         # 创建一个workbook
         book = xlwt.Workbook(encoding='utf-8', style_compression=0)
         # 创建一个sheet，命名为dede
         sheet = book.add_sheet('dede', cell_overwrite_ok=True)
         j = 0
         i = 0
-        for pages in range(36,50):
-            data = self.base_spider_webdriver(self.__url_tianyan_shuma)
+        for pages in range(1, 10):
+            url_tianyan_shuma = 'http://nanjing.tianyancha.com/search/p' + str(self.__page) + '?key=%E6%95%B0%E7%A0%81'
+            data = self.base_spider_webdriver(url_tianyan_shuma)
             soup = BeautifulSoup(data)
             loan = soup.findAll("div", attrs={'class': 'title'})
             company_names = soup.findAll("span", attrs={'ng-bind-html': 'node.name | trustHtml'})
@@ -53,7 +51,7 @@ class TianyanSpider(GreenSpider):
                     sheet.write((i-2)/3, 4, each.text.decode('utf-8'))
                 print each.text
                 i += 1
-            self.__page+=1
+            self.__page += 1
         book.save('E:/777.xls')
 
 
